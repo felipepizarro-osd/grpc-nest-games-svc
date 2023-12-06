@@ -2,7 +2,11 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Game } from './entity/games.entity';
-import { CreateGameResponse, GetGameResponse } from './games.pb';
+import {
+  CreateGameResponse,
+  GetGameResponse,
+  GetGamesResponse,
+} from './games.pb';
 import { CreateGameDto, GetGameDto } from './games.dto';
 @Injectable()
 export class GamesService {
@@ -35,6 +39,22 @@ export class GamesService {
     return {
       id: game.id,
       status: HttpStatus.CREATED,
+      error: [],
+    };
+  }
+  //get all games
+  public async getAllGames(): Promise<GetGamesResponse> {
+    const games: Game[] = await this.repository.find();
+    if (!games) {
+      return {
+        games: null,
+        status: HttpStatus.NOT_FOUND,
+        error: [`Games does not exist`],
+      };
+    }
+    return {
+      games,
+      status: HttpStatus.OK,
       error: [],
     };
   }
