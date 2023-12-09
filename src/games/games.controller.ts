@@ -27,6 +27,7 @@ import {
   CreateGameResponse,
   GAMES_SERVICE_NAME,
   GetGameResponse,
+  GetGamesResponse
 } from './games.pb';
 import { CreateGameDto, GetGameDto } from './games.dto';
 
@@ -36,13 +37,17 @@ export class GamesController {
   private readonly service: GamesService;
 
   @GrpcMethod(GAMES_SERVICE_NAME, 'CreateGame')
-  private createGame(payload: CreateGameDto): Promise<CreateGameResponse> {
-    console.log(payload);
+  public createGame(payload: CreateGameDto): Promise<CreateGameResponse> {
     return this.service.createGame(payload);
   }
 
   @GrpcMethod(GAMES_SERVICE_NAME, 'GetGame')
-  private getGame(payload: GetGameDto): Promise<GetGameResponse> {
+  public getGame(payload: GetGameDto): Promise<GetGameResponse> {
     return this.service.getGame(payload);
+  }
+
+  @GrpcMethod(GAMES_SERVICE_NAME, 'GetAllGames')
+  public getAllGames(): Promise<GetGamesResponse> {
+    return this.service.getAllGames();
   }
 }
